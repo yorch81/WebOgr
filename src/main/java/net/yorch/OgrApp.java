@@ -1,15 +1,11 @@
 package net.yorch;
 
-/**
- * Hello world!
- *
- */
-public class App {
-    public static void main( String[] args ) {
-        System.out.println( "Web OGR Tool !!!" );
+public class OgrApp {
+
+	public static void main(String[] args) {
+		System.out.println( "Web OGR Tool !!!" );
         
-        
-        String command = "ogr2ogr -f \"ESRI Shapefile\" \"C:/Code/Construcciones.shp\" \"MSSQL:server=148.237.75.92,1433;database=SGC_PRINCIPAL;uid=sa;pwd=password;\" -sql \"SELECT * FROM [dbo].[Construcciones]\" -overwrite -a_srs EPSG:32614";
+        String command = "ogr2ogr -f \"ESRI Shapefile\" \"C:/Code/Construcciones.shp\" \"MSSQL:server=148.237.75.92,1433;database=SGC_PRINCIPAL;uid=sa;pwd=passwd;\" -sql \"SELECT * FROM [dbo].[Construcciones]\" -overwrite -a_srs EPSG:32614";
         
         String[] aCommand; 
 		
@@ -30,5 +26,6 @@ public class App {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    }
+	}
+
 }

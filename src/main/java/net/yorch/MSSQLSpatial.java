@@ -75,7 +75,7 @@ public class MSSQLSpatial extends DBConnection {
 	 * Check SQL Server Database Connection
 	 */
 	@Override
-	public boolean check() {
+	public boolean checkConnection() {
 		return conn == null ? false : true;
 	}
 	

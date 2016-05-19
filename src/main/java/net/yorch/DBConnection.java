@@ -29,7 +29,7 @@ public abstract class DBConnection {
 	 * 
 	 * @return boolean
 	 */
-	public abstract boolean check();
+	public abstract boolean checkConnection();
 	
 	/**
 	 * Get Ogr String Database Connection

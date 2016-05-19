@@ -75,7 +75,7 @@ public class MySQL extends DBConnection {
 	 * Check MySQL Connection
 	 */
 	@Override
-	public boolean check() {
+	public boolean checkConnection() {
 		return conn == null ? false : true;
 	}
 

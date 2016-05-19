@@ -34,14 +34,14 @@ public class WOgr {
 	/**
 	 * Import a ShapeFile into Database
 	 * 
-	 * @param connection DBConnection Database Connection
+	 * @param connection OgrConnection Database Connection
 	 * @param tableName  String Table to Import ShapeFile
 	 * @param shapeFile  String Path of Shapefile
 	 * @param asrs	     String Default SRS
 	 * @param ssrs	 	 String Override SRS
 	 * @return boolean
 	 */
-	public boolean importToDb(DBConnection connection, String tableName, String shapeFile, String asrs, String ssrs) {
+	public boolean importToDb(OgrConnection connection, String tableName, String shapeFile, String asrs, String ssrs) {
 		StringBuilder sbCommand = new StringBuilder("");
 		
 		sbCommand.append("ogr2ogr -f \"");
@@ -84,14 +84,14 @@ public class WOgr {
 	/**
 	 * Export a ShapeFile from a Database Table
 	 * 
-	 * @param connection DBConnection Database Connection
+	 * @param connection OgrConnection Database Connection
 	 * @param tableName  String Table to Import ShapeFile
 	 * @param shapeFile  String Path of Shapefile
 	 * @param asrs	     String Default SRS
 	 * @param ssrs	 	 String Override SRS
 	 * @return boolean
 	 */
-	public boolean exportFromDb(DBConnection connection, String tableName, String shapeFile, String asrs, String ssrs) {
+	public boolean exportFromDb(OgrConnection connection, String tableName, String shapeFile, String asrs, String ssrs) {
 		StringBuilder sbCommand = new StringBuilder("");
 		String sqlTable = "SELECT * FROM " + tableName;
 		

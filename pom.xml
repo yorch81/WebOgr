@@ -19,10 +19,24 @@
   
   <repositories>    
     <repository>
-	  <id>Yorch</id>
-	  <name>Yorch Maven Repository</name>
-	  <url>http://mvn.3utilities.com</url>
-	</repository>
+      <id>Yorch</id>
+      <name>Yorch Maven Repository</name>
+      <url>http://mvn.3utilities.com</url>
+	  </repository>
+
+    <repository>
+      <id>jcenter</id>
+      <url>http://jcenter.bintray.com </url>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </snapshots>
+       <releases>
+         <enabled>true</enabled>
+         <checksumPolicy>warn</checksumPolicy>
+      </releases>
+    </repository>
   </repositories>
   
   <build>  

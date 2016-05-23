@@ -100,7 +100,7 @@ public class MSSQLSpatial extends DBConnection {
 	 */
 	@Override
 	public String getOgrTables() {
-		String sql = "SELECT f_table_name FROM geometry_columns";
+		String sql = "SELECT f_table_schema, f_table_name FROM geometry_columns";
 		
 		JSONObject json = new JSONObject();
 	
@@ -115,12 +115,11 @@ public class MSSQLSpatial extends DBConnection {
 				int i = 1;
 				
 				while (result.next()) {
-					json.put(String.valueOf(i), result.getString("f_table_name"));
+					json.put(String.valueOf(i), result.getString("f_table_schema") + "." + result.getString("f_table_name"));
 					i++;
 				}
 			} catch (SQLException e) {
-				
-				e.printStackTrace();
+				json = new JSONObject();
 			}
 		}
 		

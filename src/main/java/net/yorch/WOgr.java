@@ -77,7 +77,9 @@ public class WOgr {
 		// MySQL
 		if (connection.getOgrFormat().equals("MySQL"))
 			sbCommand.append("-lco ENGINE=MyISAM");
-			
+		
+		sbCommand.append(" -skipfailures");
+		
 		return executeOgr(sbCommand.toString());
 	}
 	
@@ -122,6 +124,8 @@ public class WOgr {
 			sbCommand.append(ssrs);
 			sbCommand.append(" ");
 		}
+		
+		sbCommand.append(" -skipfailures");
 		
 		return executeOgr(sbCommand.toString());
 	}

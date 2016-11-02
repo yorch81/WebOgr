@@ -34,6 +34,11 @@ public class OgrConnection {
     public static final int MySQL=2;
     
     /**
+     * PostGis
+     */
+    public static final int PostGis=3;
+    
+    /**
      * Database Connection
      */
     DBConnection conn = null;
@@ -48,11 +53,20 @@ public class OgrConnection {
 	 * @param dbname   String Database Name
 	 * @param portNumber int  Database Port
      */
-	public OgrConnection(int type, String hostname, String username, String password, String dbname, int portNumber) {
-		if (type == MSSQLSpatial)
-			conn = new MSSQLSpatial(hostname, username, password, dbname, portNumber);
-		else
-			conn = new MySQL(hostname, username, password, dbname, portNumber);
+	public OgrConnection(int type, String hostname, String username, String password, String dbname, int portNumber) {		
+		switch (type) {
+			case MSSQLSpatial:
+				conn = new MSSQLSpatial(hostname, username, password, dbname, portNumber);
+				break;
+			case MySQL:
+				conn = new MySQL(hostname, username, password, dbname, portNumber);
+				break;
+			case PostGis:
+				conn = new PostGis(hostname, username, password, dbname, portNumber);
+				break;
+			default:
+				conn = new MSSQLSpatial(hostname, username, password, dbname, portNumber);
+		}
 	}
 	
 	/**

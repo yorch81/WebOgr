@@ -115,6 +115,12 @@
     </dependency>
     
     <dependency>
+    	<groupId>postgresql</groupId>
+	    <artifactId>postgresql</artifactId>
+	    <version>9.4.1208-jdbc42-atlassian-hosted</version>
+	</dependency>
+
+    <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
       <version>20140107</version>

@@ -138,7 +138,7 @@ public class WOgr {
 	 */
 	private boolean executeOgr(String command) {
         String[] aCommand; 
-		
+		System.out.println(command);
 		if (System.getProperty("os.name").contains("Windows"))
 			aCommand = new String[]{"cmd.exe","/c",command};
 		else

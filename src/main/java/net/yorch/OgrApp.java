@@ -5,10 +5,10 @@ public class OgrApp {
 	public static void main(String[] args) {
 		System.out.println( "Web OGR Tool !!!" );
         
-		OgrConnection sql = new OgrConnection(OgrConnection.MSSQLSpatial, "IICSRVPRUEBAS", "sa", "u4tpa55w0rd", "SGC_CARTO", 1433);
-		//OgrConnection sql = new OgrConnection(OgrConnection.MSSQLSpatial, "192.168.9.76", "sa", "ser3.PrmT", "SGC_PRINCIPAL", 1433);
+		//OgrConnection sql = new OgrConnection(OgrConnection.MSSQLSpatial, "IICSRVPRUEBAS", "sa", "", "SGC_CARTO", 1433);
+		//OgrConnection sql = new OgrConnection(OgrConnection.MSSQLSpatial, "192.168.9.76", "sa", "", "SGC_PRINCIPAL", 1433);
 		//OgrConnection sql = new OgrConnection(OgrConnection.PostGis, "localhost", "postgres", "", "postgis_23_sample", 5432);
-		//OgrConnection sql = new OgrConnection(OgrConnection.MySQL, "localhost", "root", "r00tmysql", "GEO", 3306);
+		OgrConnection sql = new OgrConnection(OgrConnection.MySQL, "localhost", "root", "", "GEO", 3306);
 		
 		if (sql.checkConnection()) {
 			WOgr ogr =  new WOgr();

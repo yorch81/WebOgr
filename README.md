@@ -1,7 +1,7 @@
 # WebOgr #
 
 ## Description ##
-Web Tool for import and export ESRI Shapefiles.
+Web Tool for import and export ESRI Shapefiles to Databases.
 
 ## Requirements ##
 * [Java](https://www.java.com/es/download/)
@@ -12,6 +12,23 @@ Web Tool for import and export ESRI Shapefiles.
 Execute mvn javadoc:javadoc.
 
 ## Installation ##
+Create configuration file with the next structure:
+
+~~~
+
+dbtype=1 MSSQLSERVER 2 MYSQL 3 POSTGIS
+hostname=localhost (or localhost\INSTANCE_OF_SQL_SERVER)
+user= (User of SQL Server or MYSQL)
+password= (Password of User)
+dbname= (DataBase Name)
+dbport= (DataBase Port)
+port=8080 (Web Tool Port)
+basedir= (Directory Base)
+appuser= (Application User)
+apppassword= (Application Password)
+
+~~~
+
 Generate and execute jar.
 
 ## Notes ##

@@ -66,23 +66,30 @@ public class WebApp {
      * @access private
      */
 	private String basedir = "";
+		
+	/**
+     * Default Database Connection
+     *
+     * VAR OgrConnection dftDb Default Database Connection
+     * @access private
+     */
+	private OgrConnection dftDb;
 	
 	/**
 	 * Constructor of WebApp
 	 * 
-	 * @param rbackup RBackup Instance
 	 * @param port int Application Port
 	 * @param user String Application User
-	 * @param password String Application User Password
+	 * @param password String Application Password
 	 * @param basedir String Directory Base
-	 * @param mdf String MDF Directory
-	 * @param ldf String LDF Directory
+	 * @param db OgrConnection Database Connection
 	 * @see WebApp
 	 */
-	public WebApp(int port, String user, String password, String basedir) {
+	public WebApp(int port, String user, String password, String basedir, OgrConnection db) {
 		this.appUser = user;
 		this.appPassword = password;
 		this.basedir = basedir;
+		this.dftDb = db;
 		
 		/**
 	     * Port Applicacion
@@ -127,7 +134,8 @@ public class WebApp {
 	        @Override
 	        public Object handle(Request request, Response response) {
 	        	request.session().removeAttribute("appuser");
-
+	        	request.session().removeAttribute("loginerror");
+	        	
 	        	response.redirect("/");
 
 	        	return "exit";
@@ -233,7 +241,7 @@ public class WebApp {
 		//tempData.put("listDb", listDb);
 		tempData.put("baseDir", this.basedir);
 		
-		FMTemplate rbackupTemp = new FMTemplate("rbackup.ftl", tempData);
+		FMTemplate rbackupTemp = new FMTemplate("webogr.ftl", tempData);
 		
 		StringWriter swRBackup = rbackupTemp.get();
 		

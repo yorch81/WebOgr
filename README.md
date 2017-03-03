@@ -18,7 +18,7 @@ Create configuration file with the next structure:
 
 dbtype=1 MSSQLSERVER 2 MYSQL 3 POSTGIS
 hostname=localhost (or localhost\INSTANCE_OF_SQL_SERVER)
-user= (User of SQL Server or MYSQL)
+user= (User of SQL Server/MYSQL/PostGis)
 password= (Password of User)
 dbname= (DataBase Name)
 dbport= (DataBase Port)

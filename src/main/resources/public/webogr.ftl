@@ -81,130 +81,9 @@
     	<script src="./js/bootbox.js"></script>
 
 		<script type="text/javascript">	
-			/**
-			 * Execute Remote Backup
-			 */
-			function RBackup(){
-				var currentDir = "";
-				var fileName = "";
-				var dbName = "";
-				
-				/**
-				 * Sets Current Directory
-				 * @param String pCurrentDir Current Directory
-				 */
-				this.setCurrentDir =  function(pCurrentDir){
-					currentDir = pCurrentDir;
-				}
-				
-				/**
-				 * Sets Backup File name
-				 * @param String pFileName Backup File Name
-				 */
-				this.setFileName = function(pFileName){
-					fileName = pFileName;
-				}
-				
-				/**
-				 * Sets Database Name to Backup
-				 * @param String pDbName Database Name
-				 */
-				this.setDbName = function(pDbName){
-					dbName = pDbName;
-				}
-				
-				/**
-				 * Gets Current Directory
-				 * @return String Current Directory
-				 */
-				this.getCurrentDir =  function(){
-					return currentDir;
-				}
-				
-				/**
-				 * Gets Backup File name
-				 * @return String Backup File name
-				 */
-				this.getFileName = function(){
-					return fileName;
-				}
-				
-				/**
-				 * Gets Database Name to Backup
-				 * @return String Database Name 
-				 */
-				this.getDbName = function(){
-					return dbName;
-				}
-				
-				/**
-				 * Execute Backup
-				 * @return void
-				 */
-				this.backup = function(){	
-					if (fileName == ""){
-						bootbox.alert("Must type Backup File Name");
-						$('#txtFile').focus();
-					}
-					else{
-						$('#processing-modal').modal('toggle');
-						$('#label-process').html('Processing: ' + fileName);
-						fileName = currentDir + fileName;
-						
-						$.post('/rbackup', {filename: fileName, dbname: dbName},
-								function(response,status) {
-			                    	$('#processing-modal').modal('hide');
-			                        
-			                        if (response.length > 0) {
-			                        	bootbox.alert(response);
-			                        }
-			                        else
-			                        	location.reload(true);
-			                }).error(
-			                    function(){
-			                        console.log('Application not responding');
-			                    }
-			                );
-					}
-				}
-
-				/**
-				 * Execute Restore
-				 * @return void
-				 */
-				this.restore= function(){	
-					if ($('#txtDbRestore').val() == ""){
-						bootbox.alert("Must type DataBase to Restore");
-						$('#txtDbRestore').focus();
-					}
-					else{
-						$('#processing-restore').modal('hide');
-						$('#processing-modal').modal('toggle');
-						$('#label-process').html('Restoring: ' + $('#txtDbRestore').val());
-						fileName = currentDir + fileName;
-						
-						$.post('/restore', {filename: fileName, dbname: $('#txtDbRestore').val()},
-								function(response,status) {
-			                    	$('#processing-modal').modal('hide');
-
-			                    	if (response.length > 0) {
-			                        	bootbox.alert(response);
-			                        }
-			                        else
-			                        	location.reload(true);
-			                }).error(
-			                    function(){
-			                        console.log('Application not responding');
-			                    }
-			                );
-					}
-				}
-			}
-		
+					
 			// Init JQuery
 			$(document).ready( function() {				
-				var rbackup =  new RBackup();
-				
 				$('#explorer').fileTree({ root: './', script: '/getfiles', folderEvent: 'click', expandSpeed: 750, collapseSpeed: 750, multiFolder: false }, function(file) { 
 
 					// Gets File Name
@@ -214,7 +93,6 @@
 					file = files[arrLen];
 
 					$('#txtFile').val(file);
-					//$('#btn_backup').html("Restore");
 				});
 			
 				$('#explorer').on('filetreeexpand', 
@@ -225,25 +103,15 @@
 			    });
 				
 				$("#btn_backup").click(function(){
-					rbackup.setCurrentDir($('#txtPath').val());
-	    			rbackup.setFileName($('#txtFile').val());
-	    			rbackup.setDbName($('#cmbDb').val());
-	    			
-					rbackup.backup();
+					bootbox.alert("Backup");
 			    });
 
 				$("#btn_validate").click(function(){
-					if($('#txtFile').val() != '')
-						$('#processing-restore').modal('toggle');
-					else
-						bootbox.alert("Please select a backup for restore");
+					bootbox.alert("Validate");
 			    });
 			    
 			    $("#btn_restore").click(function(){
-					rbackup.setCurrentDir($('#txtPath').val());
-	    			rbackup.setFileName($('#txtFile').val());
-	    			
-					rbackup.restore();
+					bootbox.alert("Restore");
 			    });
 
 			    $("#btn_credits").click(function() {
@@ -275,7 +143,6 @@
 				
 				<label for="cmbDb">DataBases:</label>
 				<select id="cmbDb" class="form-control">
-					${listDb}
 				</select>
 				
 				<input id="txtFile" type="text" class="form-control" placeholder="Backup File Name" name="txtFile" required>

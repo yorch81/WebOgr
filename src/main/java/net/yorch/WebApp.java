@@ -7,6 +7,7 @@ import static spark.Spark.halt;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
@@ -14,6 +15,10 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletException;
+import javax.servlet.http.Part;
 
 import spark.Request;
 import spark.Response;
@@ -157,6 +162,30 @@ public class WebApp {
 	        }
 	    });
 		
+		// Upload Zip file
+		post("/upload", new Route() {
+	        @Override
+	        public Object handle(Request request, Response response) {
+	        	MultipartConfigElement multipartConfigElement = new MultipartConfigElement(getBaseDir());
+	        	
+	        	request.raw().setAttribute("org.eclipse.multipartConfig", multipartConfigElement);
+	        	String retResponse = "";
+	        	
+	        	try {
+					Part file = request.raw().getPart("file");
+					//long fileSize = file.getSize();
+					//String fileName = file.getName();
+					
+					file.write("file.zip");
+				} catch (IOException | ServletException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        	   
+	            return retResponse;
+	        }
+	    });
+		
 		/**
 	     * Path /rbackup
 	     * Execute Backup
@@ -262,6 +291,15 @@ public class WebApp {
 			return true;
 		else
 			return false;
+	}
+	
+	/**
+	 * Gets Base Directory
+	 * 
+	 * @return String
+	 */
+	private String getBaseDir(){
+		return this.basedir;
 	}
 	
 	/**

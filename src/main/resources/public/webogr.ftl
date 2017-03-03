@@ -69,6 +69,11 @@
 
 		    .modal-static .modal-content .icon {
 		    }
+
+		    .dz {
+				width: 200;
+				height: 200;
+			}
 		</style>
 		
 		<script src="./js/jquery-1.9.1.js" type="text/javascript"></script>		
@@ -79,6 +84,9 @@
 		<link rel="stylesheet" href="./metro-bootstrap-master/dist/css/metro-bootstrap.min.css" />
 		<script src="../bootstrap-3.2.0-dist/js/bootstrap.min.js"></script>
     	<script src="./js/bootbox.js"></script>
+
+    	<link rel="stylesheet" href="./dropzone/dropzone.min.css" />
+    	<script type="text/javascript" src="./dropzone/dropzone.min.js"></script>
 
 		<script type="text/javascript">	
 					
@@ -117,6 +125,33 @@
 			    $("#btn_credits").click(function() {
                     $('#window-credits').modal('toggle');
                 });
+
+                // DropZone Configuration
+                Dropzone.autoDiscover = false;
+
+                Dropzone.options.dropzonefile = {
+			        uploadMultiple : false,
+			        maxFiles : 1,
+			        acceptedFiles: ".zip",
+			        error: function(file, response) {
+			            this.removeAllFiles();
+
+			            bootbox.alert(response);
+			          },
+			        init: function() {
+			          this.on("success", function(file, response) { 
+			            //this.disable();
+			            this.removeAllFiles();
+
+			            bootbox.alert("The ZIP File upload successfully");
+
+			            if (response.length == 0)
+			              console.log("Error on upload file");       
+			          });
+			        }
+			    };
+
+			    new Dropzone("#dropzonefile" , Dropzone.options.dropzonefile );
 			});
 		</script>
 
@@ -137,25 +172,39 @@
 	    </div>
 		
 		<div class="container">
-			<div class="example">
-				<label for="txtPath">Selected Path:</label>
-				<input id="txtPath" type="text" class="form-control" placeholder="Path" name="txtPath" value = "${baseDir}" required disabled>
-				
-				<label for="cmbDb">DataBases:</label>
-				<select id="cmbDb" class="form-control">
-				</select>
-				
-				<input id="txtFile" type="text" class="form-control" placeholder="Backup File Name" name="txtFile" required>
-								
-				<div id="explorer" class="file_explorer"></div>
-				<br>
-				<div>
+			<span>
+				<div class="example">
+					<label for="txtPath">Selected Path:</label>
+					<input id="txtPath" type="text" class="form-control" placeholder="Path" name="txtPath" value = "${baseDir}" required disabled>
+					
+					<label for="cmbDb">DataBases:</label>
+					<select id="cmbDb" class="form-control">
+					</select>
+					
+					<input id="txtFile" type="text" class="form-control" placeholder="Backup File Name" name="txtFile" required>
+									
+					<div id="explorer" class="file_explorer"></div>
+					<br>
+					<div>
+						<center>
+							<button id="btn_backup" class="btn btn-lg btn-info">Backup</button>
+							<button id="btn_validate" class="btn btn-lg btn-success">Restore</button>
+						</center>
+					</div>
+				</div>
+				<!--  Upload Zip -->
+				<div class="example">
+					<label for="dropzonefile">Upload ZIP Shapefile:</label>
+
 					<center>
-						<button id="btn_backup" class="btn btn-lg btn-info">Backup</button>
-						<button id="btn_validate" class="btn btn-lg btn-success">Restore</button>
+						<form action="/upload" class="dropzone dz" id="dropzonefile">
+				          <div class="dz-message">
+				            <img src="./img/upload.png" class="img-responsive" alt="Dropzone">
+				          </div>
+				        </form>
 					</center>
 				</div>
-			</div>    
+			</span>    
 		</div>
 		
 		<!-- Static Modal Restore Data -->

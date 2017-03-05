@@ -41,13 +41,6 @@ public class OgrApp {
 		
 		Properties config = new Properties();
 		
-		// Unzip
-		ZipUtil.unpack(new File("/home/yorch/tmp/zip/predios_.zip"), new File("/home/yorch/tmp/zip"));
-		
-		// Zip
-		ZipUtil.pack(new File("/home/yorch/tmp/zip/predios/"), new File("/home/yorch/tmp/zip/predios.zip"));
-		
-		/*
 		try {
 			config.load(new FileInputStream("webogr.properties"));
 			
@@ -96,24 +89,5 @@ public class OgrApp {
 			
 			System.out.printf("File generated, please restart Application");
 		}
-		*/
-		
-		/*
-		//OgrConnection sql = new OgrConnection(OgrConnection.MSSQLSpatial, "IICSRVPRUEBAS", "sa", "", "SGC_CARTO", 1433);
-		//OgrConnection sql = new OgrConnection(OgrConnection.PostGis, "localhost", "postgres", "", "postgis_23_sample", 5432);
-		OgrConnection sql = new OgrConnection(OgrConnection.MySQL, "localhost", "root", "", "GEO", 3306);
-		
-		if (sql.checkConnection()) {
-			WOgr ogr =  new WOgr();
-						
-			//System.out.println(sql.getOgrTables());
-			
-			//ogr.importToDb(sql, "pred_tula", "C:/CODE/shapes/2D/PREDIOS_TULA.shp", "EPSG:32614", "EPSG:32614");
-			ogr.exportFromDb(sql, "gz_sector", "C:/shapes/gz_sector.shp", "EPSG:32614", "EPSG:32614");
-		}
-		else
-			System.out.println("Not Connected");
-			
-		*/
 	}
 }

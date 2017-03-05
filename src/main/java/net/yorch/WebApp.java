@@ -1,20 +1,18 @@
 package net.yorch;
 
 import static spark.Spark.get;
-import static spark.Spark.post;
-import static spark.SparkBase.setPort;
 import static spark.Spark.halt;
+import static spark.Spark.post;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletException;
@@ -98,8 +96,8 @@ public class WebApp {
 		
 		/**
 	     * Port Applicacion
-	     */		
-		setPort(port);
+	     */
+		Spark.setPort(port);
 		
 		/**
 	     * Public Files Path
@@ -176,13 +174,14 @@ public class WebApp {
 	        	String retResponse = "";
 	        	
 	        	try {
-					Part file = request.raw().getPart("file");
-					//long fileSize = file.getSize();
-					//String fileName = file.getName();
+					Part file = (Part) request.raw().getPart("file");
+										
+					String fileName = UUID.randomUUID().toString().replace("-", "") + ".zip";
 					
-					file.write("file.zip");
+					retResponse = fileName;
+					
+					file.write(fileName);
 				} catch (IOException | ServletException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 	        	   
@@ -190,6 +189,7 @@ public class WebApp {
 	        }
 	    });
 		
+		// Set Selected Directory
 		post("/setdir", new Route() {
 	        @Override
 	        public Object handle(Request request, Response response) {	 
@@ -203,29 +203,86 @@ public class WebApp {
 	        }
 	    });
 		
-		/**
-	     * Path /rbackup
-	     * Execute Backup
-	     */
-		post("/rbackup", new Route() {
+		// Unzip Zip File
+		post("/unzip", new Route() {
 	        @Override
 	        public Object handle(Request request, Response response) {	 
-	        	String fileName = request.queryParams("filename");
-	        	String dbName = request.queryParams("dbname");
-	        	     	
-	    		//int result = rbackup.backup(fileName, dbName);
-	        	int result = 1;
-	    			        
-	    		if (result == 0) 
-	    			response.status(200);
-	    		else 
-	    			response.status(206);
+	        	String dir = request.queryParams("dir");
+	        	
+	        	request.session().attribute("appdir", dir);
+	        	
+	        	response.status(200);
 	    		
-	    		return backupMsg(result);
+	        	// Unzip
+	    		//ZipUtil.unpack(new File("/home/yorch/tmp/zip/predios_.zip"), new File("/home/yorch/tmp/zip"));
+	    		
+	    		// Zip
+	    		//ZipUtil.pack(new File("/home/yorch/tmp/zip/predios/"), new File("/home/yorch/tmp/zip/predios.zip"));
+	        	
+	    		return dir;
 	        }
 	    });
 		
+		// Zip Folder
+		post("/zip", new Route() {
+	        @Override
+	        public Object handle(Request request, Response response) {	 
+	        	String dir = request.queryParams("dir");
+	        	
+	        	request.session().attribute("appdir", dir);
+	        	
+	        	response.status(200);
+	    		
+	    		return dir;
+	        }
+	    });
 		
+		// Import Shapefile
+		post("/import", new Route() {
+	        @Override
+	        public Object handle(Request request, Response response) {	 
+	        	String dir = request.queryParams("dir");
+	        	
+	        	request.session().attribute("appdir", dir);
+	        	
+	        	response.status(200);
+	    		
+	        	/*
+	    		//OgrConnection sql = new OgrConnection(OgrConnection.MSSQLSpatial, "IICSRVPRUEBAS", "sa", "", "SGC_CARTO", 1433);
+	    		//OgrConnection sql = new OgrConnection(OgrConnection.PostGis, "localhost", "postgres", "", "postgis_23_sample", 5432);
+	    		OgrConnection sql = new OgrConnection(OgrConnection.MySQL, "localhost", "root", "", "GEO", 3306);
+	    		
+	    		if (sql.checkConnection()) {
+	    			WOgr ogr =  new WOgr();
+	    						
+	    			//System.out.println(sql.getOgrTables());
+	    			
+	    			//ogr.importToDb(sql, "pred_tula", "C:/CODE/shapes/2D/PREDIOS_TULA.shp", "EPSG:32614", "EPSG:32614");
+	    			ogr.exportFromDb(sql, "gz_sector", "C:/shapes/gz_sector.shp", "EPSG:32614", "EPSG:32614");
+	    		}
+	    		else
+	    			System.out.println("Not Connected");
+	    			
+	    		*/
+	        	
+	    		return dir;
+	        }
+	    });
+		
+		// Import Table to Shapefile
+		post("/export", new Route() {
+	        @Override
+	        public Object handle(Request request, Response response) {	 
+	        	String dir = request.queryParams("dir");
+	        	
+	        	request.session().attribute("appdir", dir);
+	        	
+	        	response.status(200);
+	    		
+	    		return dir;
+	        }
+	    });
+				
 		/**
 	     * Login User
 	     */
@@ -354,6 +411,18 @@ public class WebApp {
 		File dirFile = new File(dir);
 	
 		return dirFile.exists();
+	}
+	
+	/**
+	 * Check if File Exists
+	 * 
+	 * @param filePath String File Full Name
+	 * @return boolean
+	 */
+	public static boolean fileExists(String filePath){
+		File file = new File(filePath);
+	
+		return file.exists();
 	}
 	
 	/**

@@ -79,22 +79,12 @@
 		<link rel="stylesheet" href="./metro-bootstrap-master/dist/css/metro-bootstrap.min.css" />
 		<script src="../bootstrap-3.2.0-dist/js/bootstrap.min.js"></script>
     	<script src="./js/bootbox.js"></script>
+    	<script src="./js/WebOgr.js"></script>
 
     	<link rel="stylesheet" href="./dropzone/dropzone.min.css" />
     	<script type="text/javascript" src="./dropzone/dropzone.min.js"></script>
 
 		<script type="text/javascript">	
-
-			function setDirectory(){
-				$.post('/setdir', {dir: $('#txtPath').val()},
-							function(response,status) {
-			                	//console.log(response);
-			                }).error(
-			                    function(){
-			                        console.log('Application not responding');
-			                    }
-			                );
-			}
 
 			// Init JQuery
 			$(document).ready( function() {				
@@ -106,11 +96,7 @@
 					var arrLen = files.length - 1;
 					file = files[arrLen];
 
-					var fileSt = file.split(".");
-					var fileExt = fileSt[1];
-
-					if (fileExt == 'shp' | fileExt == 'SHP')
-						console.log("File is shape");
+					WebOgr.setFileType(file);
 
 					$('#txtFile').val(file);
 				});
@@ -120,24 +106,12 @@
 							$('#txtPath').val(data.rel);
 							$('#txtFile').val("");
 
-							setDirectory();
-			    });
-				
-				$("#btn_backup").click(function(){
-					bootbox.alert("Backup");
-			    });
+							WebOgr.fileType = 0;
 
-				$("#btn_validate").click(function(){
-					bootbox.alert("Validate");
-			    });
-			    
-			    $("#btn_restore").click(function(){
-					bootbox.alert("Restore");
-			    });
+							WebOgr.setDirectory();
 
-			    $("#btn_credits").click(function() {
-                    $('#window-credits').modal('toggle');
-                });
+							WebOgr.enableButtons();
+			    });
 
                 // DropZone Configuration
                 Dropzone.autoDiscover = false;
@@ -153,18 +127,25 @@
 			          },
 			        init: function() {
 			          this.on("success", function(file, response) { 
-			            //this.disable();
 			            this.removeAllFiles();
 
-			            bootbox.alert("The ZIP File upload successfully");
-
 			            if (response.length == 0)
-			              console.log("Error on upload file");       
+			            	console.log("Error on upload file");
+			            else{
+			            	bootbox.confirm("The ZIP File " + response +  " upload successfully, do you want reload page?", 
+			            		function(result){
+			            			if (result)
+			            				location.reload();
+			            		});
+			            }
 			          });
 			        }
 			    };
 
 			    new Dropzone("#dropzonefile" , Dropzone.options.dropzonefile );
+
+			    // Listen Events
+			    WebOgr.listen();
 			});
 		</script>
 
@@ -190,18 +171,19 @@
 					<label for="txtPath">Selected Path:</label>
 					<input id="txtPath" type="text" class="form-control" placeholder="Path" name="txtPath" value = "${baseDir}" required disabled>
 					
-					<label for="cmbDb">DataBases:</label>
-					<select id="cmbDb" class="form-control">
+					<label for="cmbTables">GeoReferential Tables:</label>
+					<select id="cmbTables" class="form-control">
 					</select>
-					
+
 					<input id="txtFile" type="text" class="form-control" placeholder="Shapefile Name" name="txtFile" required>
 									
 					<div id="explorer" class="file_explorer"></div>
 					<br>
 					<div>
 						<center>
-							<button id="btn_backup" class="btn btn-lg btn-info">Backup</button>
-							<button id="btn_validate" class="btn btn-lg btn-success">Restore</button>
+							<button id="btn_zip" class="btn btn-lg btn-info" btn-action="1" disabled>Zip</button>
+							<button id="btn_import" class="btn btn-lg btn-success" disabled>Import</button>
+							<button id="btn_export" class="btn btn-lg btn-warning">Export</button>
 						</center>
 					</div>
 				</div>

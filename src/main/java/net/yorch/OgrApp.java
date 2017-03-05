@@ -1,8 +1,11 @@
 package net.yorch;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
+
+import org.zeroturnaround.zip.ZipUtil;
 
 /**
  * OgrApp<br>
@@ -38,6 +41,13 @@ public class OgrApp {
 		
 		Properties config = new Properties();
 		
+		// Unzip
+		ZipUtil.unpack(new File("/home/yorch/tmp/zip/predios_.zip"), new File("/home/yorch/tmp/zip"));
+		
+		// Zip
+		ZipUtil.pack(new File("/home/yorch/tmp/zip/predios/"), new File("/home/yorch/tmp/zip/predios.zip"));
+		
+		/*
 		try {
 			config.load(new FileInputStream("webogr.properties"));
 			
@@ -85,9 +95,8 @@ public class OgrApp {
 			interactive.save("webogr.properties");
 			
 			System.out.printf("File generated, please restart Application");
-			
-			//e.printStackTrace();
 		}
+		*/
 		
 		/*
 		//OgrConnection sql = new OgrConnection(OgrConnection.MSSQLSpatial, "IICSRVPRUEBAS", "sa", "", "SGC_CARTO", 1433);

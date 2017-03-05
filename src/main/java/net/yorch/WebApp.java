@@ -114,8 +114,10 @@ public class WebApp {
 	        public Object handle(Request request, Response response) {
 	        	StringWriter template = null;
 	        	
-	        	if (existsSession(request)){	        		
-	        		template = getRBackupTemplate(null);
+	        	if (existsSession(request)){
+	        		request.session().attribute("appdir", getBaseDir());
+	        		
+	        		template = getOgrTemplate();
 	        	}
 	        	else{
 	        		String LoginError = request.session().attribute("loginerror");
@@ -166,7 +168,9 @@ public class WebApp {
 		post("/upload", new Route() {
 	        @Override
 	        public Object handle(Request request, Response response) {
-	        	MultipartConfigElement multipartConfigElement = new MultipartConfigElement(getBaseDir());
+	        	String selDir = request.session().attribute("appdir");
+	        	
+	        	MultipartConfigElement multipartConfigElement = new MultipartConfigElement(selDir);
 	        	
 	        	request.raw().setAttribute("org.eclipse.multipartConfig", multipartConfigElement);
 	        	String retResponse = "";
@@ -183,6 +187,19 @@ public class WebApp {
 				}
 	        	   
 	            return retResponse;
+	        }
+	    });
+		
+		post("/setdir", new Route() {
+	        @Override
+	        public Object handle(Request request, Response response) {	 
+	        	String dir = request.queryParams("dir");
+	        	
+	        	request.session().attribute("appdir", dir);
+	        	
+	        	response.status(200);
+	    		
+	    		return dir;
 	        }
 	    });
 		
@@ -258,25 +275,24 @@ public class WebApp {
 	}
 	
 	/**
-	 * Return RBackup Template
+	 * Get Ogr Template
 	 * 
-	 * @param rbackup Instance of RBackup
 	 * @return StringWriter
 	 */
-	private StringWriter getRBackupTemplate(Object rbackup) {
+	private StringWriter getOgrTemplate() {
 		Map<String, Object> tempData = new HashMap<String, Object>();
 		//String listDb = rbackup.dbList();
 		
 		//tempData.put("listDb", listDb);
 		tempData.put("baseDir", this.basedir);
 		
-		FMTemplate rbackupTemp = new FMTemplate("webogr.ftl", tempData);
+		FMTemplate ogrTemp = new FMTemplate("webogr.ftl", tempData);
 		
-		StringWriter swRBackup = rbackupTemp.get();
+		StringWriter swOgr = ogrTemp.get();
 		
-		rbackupTemp = null;
+		ogrTemp = null;
 		
-		return swRBackup;
+		return swOgr;
 	}
 	
 	/**
@@ -300,6 +316,15 @@ public class WebApp {
 	 */
 	private String getBaseDir(){
 		return this.basedir;
+	}
+	
+	/**
+	 * Get Default Database Connection
+	 * 
+	 * @return OgrConnection
+	 */
+	private OgrConnection getDftDb(){
+		return this.dftDb;
 	}
 	
 	/**
@@ -408,28 +433,6 @@ public class WebApp {
 			retValue = "File Already Exists";
 		} else if (type == 2) {
 			retValue = "Not Connected to Server";
-        } else if (type == 3) {
-        	retValue = "DataBase Server Exception";
-        }
-		
-		return retValue;
-	}
-	
-	/**
-	 * Gets Backup Error Message
-	 * 
-	 * @param type int Error Type
-	 * @return String
-	 */
-	private String restoreMsg(int type) {
-		String retValue = "";
-		
-		if (type == 1) {
-			retValue = "File Not Exists";
-		} else if (type == 2) {
-			retValue = "Not Connected to Server";
-        } else if (type == 3) {
-        	retValue = "DataBase Already Exists";
         } else if (type == 3) {
         	retValue = "DataBase Server Exception";
         }

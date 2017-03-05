@@ -69,11 +69,6 @@
 
 		    .modal-static .modal-content .icon {
 		    }
-
-		    .dz {
-				width: 200;
-				height: 200;
-			}
 		</style>
 		
 		<script src="./js/jquery-1.9.1.js" type="text/javascript"></script>		
@@ -89,7 +84,18 @@
     	<script type="text/javascript" src="./dropzone/dropzone.min.js"></script>
 
 		<script type="text/javascript">	
-					
+
+			function setDirectory(){
+				$.post('/setdir', {dir: $('#txtPath').val()},
+							function(response,status) {
+			                	//console.log(response);
+			                }).error(
+			                    function(){
+			                        console.log('Application not responding');
+			                    }
+			                );
+			}
+
 			// Init JQuery
 			$(document).ready( function() {				
 				$('#explorer').fileTree({ root: './', script: '/getfiles', folderEvent: 'click', expandSpeed: 750, collapseSpeed: 750, multiFolder: false }, function(file) { 
@@ -100,14 +106,21 @@
 					var arrLen = files.length - 1;
 					file = files[arrLen];
 
+					var fileSt = file.split(".");
+					var fileExt = fileSt[1];
+
+					if (fileExt == 'shp' | fileExt == 'SHP')
+						console.log("File is shape");
+
 					$('#txtFile').val(file);
 				});
 			
 				$('#explorer').on('filetreeexpand', 
 			    		function (e, data){
 							$('#txtPath').val(data.rel);
-							//$('#btn_backup').html("Backup");
 							$('#txtFile').val("");
+
+							setDirectory();
 			    });
 				
 				$("#btn_backup").click(function(){
@@ -181,7 +194,7 @@
 					<select id="cmbDb" class="form-control">
 					</select>
 					
-					<input id="txtFile" type="text" class="form-control" placeholder="Backup File Name" name="txtFile" required>
+					<input id="txtFile" type="text" class="form-control" placeholder="Shapefile Name" name="txtFile" required>
 									
 					<div id="explorer" class="file_explorer"></div>
 					<br>
@@ -197,7 +210,7 @@
 					<label for="dropzonefile">Upload ZIP Shapefile:</label>
 
 					<center>
-						<form action="/upload" class="dropzone dz" id="dropzonefile">
+						<form action="/upload" class="dropzone" id="dropzonefile">
 				          <div class="dz-message">
 				            <img src="./img/upload.png" class="img-responsive" alt="Dropzone">
 				          </div>

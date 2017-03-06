@@ -100,7 +100,7 @@ public class WebApp {
 		/**
 	     * Port Applicacion
 	     */
-		Spark.setPort(port);
+		Spark.port(port);
 		
 		/**
 	     * Public Files Path
@@ -380,9 +380,7 @@ public class WebApp {
 	 */
 	private StringWriter getOgrTemplate() {
 		Map<String, Object> tempData = new HashMap<String, Object>();
-		//String listDb = rbackup.dbList();
 		
-		//tempData.put("listDb", listDb);
 		tempData.put("baseDir", this.basedir);
 		
 		FMTemplate ogrTemp = new FMTemplate("webogr.ftl", tempData);
@@ -529,26 +527,6 @@ public class WebApp {
 	    }
 	    
 		return fs.toString();
-	}
-	
-	/**
-	 * Gets Backup Error Message
-	 * 
-	 * @param type int Error Type
-	 * @return String
-	 */
-	private String backupMsg(int type) {
-		String retValue = "";
-		
-		if (type == 1) {
-			retValue = "File Already Exists";
-		} else if (type == 2) {
-			retValue = "Not Connected to Server";
-        } else if (type == 3) {
-        	retValue = "DataBase Server Exception";
-        }
-		
-		return retValue;
 	}
 }
 

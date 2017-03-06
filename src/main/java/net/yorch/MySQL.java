@@ -119,8 +119,7 @@ public class MySQL extends DBConnection {
 					i++;
 				}
 			} catch (SQLException e) {
-				
-				e.printStackTrace();
+				json = new JSONObject();
 			}
 		}
 		

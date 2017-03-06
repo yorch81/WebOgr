@@ -34,8 +34,8 @@
 			}
 			
 			.file_explorer {
-				width: 300px;
-				height: 300px;
+				width: 450px;
+				height: 350px;
 				border-top: solid 1px #BBB;
 				border-left: solid 1px #BBB;
 				border-bottom: solid 1px #FFF;
@@ -87,7 +87,8 @@
 		<script type="text/javascript">	
 
 			// Init JQuery
-			$(document).ready( function() {				
+			$(document).ready( function() {		
+				// Select File		
 				$('#explorer').fileTree({ root: './', script: '/getfiles', folderEvent: 'click', expandSpeed: 750, collapseSpeed: 750, multiFolder: false }, function(file) { 
 
 					// Gets File Name
@@ -102,7 +103,8 @@
 
 					$('#txtFile').val(file);
 				});
-			
+				
+				// Select Directory
 				$('#explorer').on('filetreeexpand', 
 			    		function (e, data){
 							$('#txtPath').val(data.rel);
@@ -186,6 +188,7 @@
 							<button id="btn_zip" class="btn btn-lg btn-info" btn-action="1" disabled>Zip</button>
 							<button id="btn_import" class="btn btn-lg btn-success" disabled>Import</button>
 							<button id="btn_export" class="btn btn-lg btn-warning">Export</button>
+							<button id="btn_mkdir" class="btn btn-lg btn-default">New Folder</button>
 						</center>
 					</div>
 				</div>

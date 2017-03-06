@@ -22,6 +22,7 @@ WebOgr.selFile = '';
  * Listen Button Eventes
  */
 WebOgr.listen = function () {
+  // Load Zip Unzip
   $("#btn_zip").click(function(){
     if ($("#btn_zip").prop('btn-action') == '1'){
       $('#txtZipFile').val(''); 
@@ -33,6 +34,7 @@ WebOgr.listen = function () {
     }
   });
 
+  // Zip File
   $("#btn_zipfile").click(function(){
     if ($('#txtZipFile').val() == '')
       bootbox.alert("Must type Zip File")
@@ -40,6 +42,7 @@ WebOgr.listen = function () {
       WebOgr.zipDirectory();
   });
 
+  // Unzip File
   $("#btn_unzip").click(function(){
     if ($('#txtDirectory').val() == '')
       bootbox.alert("Must type Directory")
@@ -47,11 +50,13 @@ WebOgr.listen = function () {
       WebOgr.unzipFile();
   });
 
+  // Load Import Shapefile
   $("#btn_import").click(function(){
     $('#txtTable').val('');
     $('#modal_import').modal('toggle');
   });
   
+  // Import Shapefile
   $("#btn_impshape").click(function(){
     if ($('#txtTable').val() == '')
       bootbox.alert("Must type Table Name")
@@ -59,11 +64,13 @@ WebOgr.listen = function () {
       WebOgr.importShape();
   });
 
+  // Load Export Table
   $("#btn_export").click(function(){
     $('#txtShape').val('');
     $('#modal_export').modal('toggle');
   });
 
+  // Export Table
   $("#btn_expshape").click(function(){
     if ($('#txtShape').val() == '')
       bootbox.alert("Must type Shapefile Name")
@@ -71,6 +78,22 @@ WebOgr.listen = function () {
       WebOgr.exportShape();
   });
 
+  // Load Make Folder
+  $("#btn_mkdir").click(function(){
+    bootbox.prompt("Type Folder Name:", 
+      function(result){ 
+        if (result != null){
+          if (result == ''){
+            bootbox.alert("Must type Folder Name");
+          }
+          else{
+            WebOgr.mkDir(result);
+          }
+        }
+      });
+  });
+
+  // Load Credits
   $("#btn_credits").click(function() {
     $('#window-credits').modal('toggle');
   });
@@ -90,6 +113,9 @@ WebOgr.setDirectory = function () {
                   );
 }
 
+/**
+ * Zip Directory
+ */
 WebOgr.zipDirectory = function () {
   var fileZip = $('#txtZipFile').val();
 
@@ -98,9 +124,12 @@ WebOgr.zipDirectory = function () {
     $('#txtZipFile').val(fileZip);
   }
 
+  $('#modal_process').modal('toggle');
+
   $.post('/zip', {dir: $('#txtPath').val(), zipname: fileZip},
           function(response, status) {
             if (status == "success"){
+              $('#modal_process').modal('hide');
               if (response == "BAD"){
                 bootbox.alert("File already exists");
               }
@@ -121,9 +150,16 @@ WebOgr.zipDirectory = function () {
                   );
 }
 
+/**
+ * Unzip  File
+ */
 WebOgr.unzipFile = function () {
+  $('#modal_process').modal('toggle');
+
   $.post('/unzip', {dir: $('#txtDirectory').val(), zip: WebOgr.selFile},
           function(response, status) {
+            $('#modal_process').modal('hide');
+
             if (status == "success"){
               if (response == "BAD"){
                 bootbox.alert("Directory already exists");
@@ -145,6 +181,9 @@ WebOgr.unzipFile = function () {
                   );
 }
 
+/**
+ * Fill Combo Tables
+ */
 WebOgr.fillTables = function () {
   $.get('/gettables', function(response, status){
                   if (status == "success"){
@@ -165,6 +204,9 @@ WebOgr.fillTables = function () {
                         });
 }
 
+/**
+ * Import Shapefile
+ */
 WebOgr.importShape = function () {
   $('#modal_import').modal('hide');
   $('#modal_process').modal('toggle');
@@ -192,6 +234,9 @@ WebOgr.importShape = function () {
                   );
 }
 
+/**
+ * Export Shapefile
+ */
 WebOgr.exportShape = function () {
   var fileShp= $('#txtShape').val();
 
@@ -230,6 +275,38 @@ WebOgr.exportShape = function () {
                   );
 }
 
+/**
+ * Make New Folder
+ * 
+ * @param  {string} folder Folder Name
+ */
+WebOgr.mkDir = function (folder) {
+  $.post('/mkdir', {dir: folder},
+          function(response, status) {
+            if (status == "success"){
+              if (response == "BAD"){
+                bootbox.alert("Directory already exists");
+              }
+              else{
+                bootbox.confirm("Directory created successfully, do you want reload page?", 
+                      function(result){
+                        if (result)
+                          location.reload();
+                      });
+              }  
+            }
+                  }).error(
+                      function(){
+                          console.log('Application not responding');
+                      }
+                  );
+}
+
+/**
+ * Set File Type
+ * 
+ * @param {string} file File Full Name
+ */
 WebOgr.setFileType = function (file) {
   var fileSt = file.split(".");
   var fileExt = fileSt[1];
@@ -245,6 +322,9 @@ WebOgr.setFileType = function (file) {
   WebOgr.enableButtons();
 }
 
+/**
+ * Enable Buttons
+ */
 WebOgr.enableButtons = function() {
   if (WebOgr.fileType == 0) {
     $("#btn_zip").prop('disabled', false);

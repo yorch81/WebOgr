@@ -18,7 +18,6 @@ import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletException;
 import javax.servlet.http.Part;
 
-import org.json.JSONObject;
 import org.zeroturnaround.zip.ZipUtil;
 
 import spark.Request;
@@ -97,19 +96,13 @@ public class WebApp {
 		this.basedir = basedir;
 		this.dftDb = db;
 		
-		/**
-	     * Port Applicacion
-	     */
+		// Set Port
 		Spark.port(port);
 		
-		/**
-	     * Public Files Path
-	     */	
+		// Set Public Files
 		Spark.staticFileLocation("/public");
 		
-		/**
-	     * Path /
-	     */
+		// Path /
 		get("/", new Route() {
 	        @Override
 	        public Object handle(Request request, Response response) {
@@ -134,10 +127,8 @@ public class WebApp {
 				return template;
 	        }
 	    });
-			
-		/**
-	     * Path /exit
-	     */
+		
+		// Path Exit
 		get("/exit", new Route() {
 	        @Override
 	        public Object handle(Request request, Response response) {
@@ -149,11 +140,8 @@ public class WebApp {
 	        	return "exit";
 	        }
 	    });
-
-		/**
-	     * Path /getfiles
-	     * Get Files Structure
-	     */
+		
+		// Path getfiles
 		post("/getfiles", new Route() {
 	        @Override
 	        public Object handle(Request request, Response response) {
@@ -263,6 +251,7 @@ public class WebApp {
 	        }
 	    });
 		
+		// Get OGR Tables
 		get("/gettables", new Route() {
 	        @Override
 	        public Object handle(Request request, Response response) {
@@ -324,10 +313,34 @@ public class WebApp {
 	        	return retResponse;
 	        }
 	    });
-				
-		/**
-	     * Login User
-	     */
+			
+		// Make Directory
+		post("/mkdir", new Route() {
+	        @Override
+	        public Object handle(Request request, Response response) {	
+	        	String retResponse = "OK";
+	        	
+	        	String dir = request.queryParams("dir");
+	        	
+	        	String curDir = request.session().attribute("appdir");
+	        	
+	        	dir = curDir + dir;
+	        	
+	        	if (WebApp.dirExists(dir)){
+	        		retResponse = "BAD";
+	        	}
+	        	else {
+	        		// create Dir
+	        		new File(dir).mkdir();
+	        	}
+	        	
+	        	response.status(200);
+	        	
+	    		return retResponse;
+	        }
+	    });
+		
+		// Web Login
 	    post("/webauth", new Route() {
 	        @Override
 	        public Object handle(Request request, Response response) {

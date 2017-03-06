@@ -34,6 +34,23 @@ public class OgrApp {
 	 * @param args String[] Arguments
 	 */
 	public static void main(String[] args) {
+		/*
+		//OgrConnection sql = new OgrConnection(OgrConnection.MSSQLSpatial, "IICSRVPRUEBAS", "sa", "", "SGC_CARTO", 1433);
+		//OgrConnection sql = new OgrConnection(OgrConnection.PostGis, "localhost", "postgres", "", "postgis_23_sample", 5432);
+		OgrConnection sql = new OgrConnection(OgrConnection.MySQL, "localhost", "root", "", "GEO", 3306);
+		
+		if (sql.checkConnection()) {
+			WOgr ogr =  new WOgr();
+						
+			//System.out.println(sql.getOgrTables());
+			
+			//ogr.importToDb(sql, "pred_tula", "C:/CODE/shapes/2D/PREDIOS_TULA.shp", "EPSG:32614", "EPSG:32614");
+			ogr.exportFromDb(sql, "gz_sector", "C:/shapes/gz_sector.shp", "EPSG:32614", "EPSG:32614");
+		}
+		else
+			System.out.println("Not Connected");
+		*/
+		
 		System.out.println( "Web OGR Tool !!!" );
 		
 		Properties config = new Properties();

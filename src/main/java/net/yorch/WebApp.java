@@ -265,46 +265,49 @@ public class WebApp {
 		// Import Shapefile
 		post("/import", new Route() {
 	        @Override
-	        public Object handle(Request request, Response response) {	 
-	        	String dir = request.queryParams("dir");
+	        public Object handle(Request request, Response response) {
+	        	String retResponse = "OK";
 	        	
-	        	request.session().attribute("appdir", dir);
+	        	String sf = request.queryParams("file");
+	        	String tn = request.queryParams("table");
+	        	String pj = request.queryParams("proj");
+	        	
+	        	WOgr ogr =  new WOgr();
+	        	
+	        	if (! ogr.importToDb(getDftDb(), tn, sf, pj, pj))
+	        		retResponse = "BAD";
+	        	
+	        	ogr = null;
 	        	
 	        	response.status(200);
 	    		
-	        	/*
-	    		//OgrConnection sql = new OgrConnection(OgrConnection.MSSQLSpatial, "IICSRVPRUEBAS", "sa", "", "SGC_CARTO", 1433);
-	    		//OgrConnection sql = new OgrConnection(OgrConnection.PostGis, "localhost", "postgres", "", "postgis_23_sample", 5432);
-	    		OgrConnection sql = new OgrConnection(OgrConnection.MySQL, "localhost", "root", "", "GEO", 3306);
-	    		
-	    		if (sql.checkConnection()) {
-	    			WOgr ogr =  new WOgr();
-	    						
-	    			//System.out.println(sql.getOgrTables());
-	    			
-	    			//ogr.importToDb(sql, "pred_tula", "C:/CODE/shapes/2D/PREDIOS_TULA.shp", "EPSG:32614", "EPSG:32614");
-	    			ogr.exportFromDb(sql, "gz_sector", "C:/shapes/gz_sector.shp", "EPSG:32614", "EPSG:32614");
-	    		}
-	    		else
-	    			System.out.println("Not Connected");
-	    			
-	    		*/
-	        	
-	    		return dir;
+	        	return retResponse;
 	        }
 	    });
 		
-		// Import Table to Shapefile
+		// Export Table to Shapefile
 		post("/export", new Route() {
 	        @Override
 	        public Object handle(Request request, Response response) {	 
-	        	String dir = request.queryParams("dir");
+	        	String retResponse = "OK";
 	        	
-	        	request.session().attribute("appdir", dir);
+	        	String sf = request.queryParams("file");
+	        	String tn = request.queryParams("table");
+	        	String pj = request.queryParams("proj");
+	        	String curDir = request.session().attribute("appdir");
+	        	
+	        	sf = curDir + sf;
+	        	
+	        	WOgr ogr =  new WOgr();
+	        	
+	        	if (! ogr.exportFromDb(getDftDb(), tn, sf, pj, pj))
+	        		retResponse = "BAD";
+	        	
+	        	ogr = null;
 	        	
 	        	response.status(200);
 	    		
-	    		return dir;
+	        	return retResponse;
 	        }
 	    });
 				

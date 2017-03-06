@@ -174,10 +174,6 @@
 					<label for="txtPath">Selected Path:</label>
 					<input id="txtPath" type="text" class="form-control" placeholder="Path" name="txtPath" value = "${baseDir}" required disabled>
 					
-					<label for="cmbTables">GeoReferential Tables:</label>
-					<select id="cmbTables" class="form-control">
-					</select>
-
 					<input id="txtFile" type="text" class="form-control" placeholder="Shapefile Name" name="txtFile" required>
 									
 					<div id="explorer" class="file_explorer"></div>
@@ -234,10 +230,69 @@
 				     </div>
 
 				    <div class="modal-body">
-				    	<label for="txtDirectory">Directory Name</label>
+				    	<label for="txtDirectory">Directory Name:</label>
 		        		<input id="txtDirectory" type="text" class="form-control" placeholder="Directory Name" name="txtDirectory" required>
 						<br>
 						<button id="btn_unzip" class="btn btn-lg btn-primary btn-block">UnZip File</button>
+				    </div>
+		        </div>
+		    </div>
+		</div>
+
+		<!-- Static Modal Import -->
+		<div class="modal fade" id="modal_import" role="dialog" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		        	<div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				        <h4 class="modal-title">Import Shapefile</h4>
+				     </div>
+
+				    <div class="modal-body">
+				    	<label for="txtTable">Table Name:</label>
+		        		<input id="txtTable" type="text" class="form-control" placeholder="Table Name" name="txtTable" required>
+						<br>
+		        		<label for="cmbProj">Projection:</label>
+						<select id="cmbProj" class="form-control">
+							<option value="EPSG:4326" selected>EPSG:4326</option>
+							<option value="EPSG:32614">EPSG:32614</option>
+						</select>
+
+		        		<br>
+						<button id="btn_impshape" class="btn btn-lg btn-primary btn-block">Import Shapefile</button>
+				    </div>
+		        </div>
+		    </div>
+		</div>
+
+		<!-- Static Modal Esport -->
+		<div class="modal fade" id="modal_export" role="dialog" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		        	<div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				        <h4 class="modal-title">Export Table</h4>
+				     </div>
+
+				    <div class="modal-body">
+				    	<label for="cmbTables">GeoReferential Tables:</label>
+						<select id="cmbTables" class="form-control">
+							<option value="predios" selected>predios</option>
+							<option value="predio2">predios2</option>
+							<option value="predios4326">predios4326</option>
+						</select>
+						<br>
+						<label for="txtShape">Shapefile Name:</label>
+		        		<input id="txtShape" type="text" class="form-control" placeholder="Shapefile Name" name="txtShape" required>
+		        		<br>
+		        		<label for="cmbProjEx">Projection:</label>
+						<select id="cmbProjEx" class="form-control">
+							<option value="EPSG:4326" selected>EPSG:4326</option>
+							<option value="EPSG:32614">EPSG:32614</option>
+						</select>
+
+		        		<br>
+						<button id="btn_expshape" class="btn btn-lg btn-primary btn-block">Import Shapefile</button>
 				    </div>
 		        </div>
 		    </div>

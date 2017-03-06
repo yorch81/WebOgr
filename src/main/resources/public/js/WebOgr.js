@@ -24,27 +24,51 @@ WebOgr.selFile = '';
 WebOgr.listen = function () {
   $("#btn_zip").click(function(){
     if ($("#btn_zip").prop('btn-action') == '1'){
+      $('#txtZipFile').val(''); 
       $('#modal_zip').modal('toggle');
     }
     else{
+      $('#txtDirectory').val(''); 
       $('#modal_unzip').modal('toggle');
     }
   });
 
   $("#btn_zipfile").click(function(){
-    WebOgr.zipDirectory();
+    if ($('#txtZipFile').val() == '')
+      bootbox.alert("Must type Zip File")
+    else
+      WebOgr.zipDirectory();
   });
 
   $("#btn_unzip").click(function(){
-    WebOgr.unzipFile();
+    if ($('#txtDirectory').val() == '')
+      bootbox.alert("Must type Directory")
+    else
+      WebOgr.unzipFile();
   });
 
   $("#btn_import").click(function(){
-    bootbox.alert("Import");
+    $('#txtTable').val('');
+    $('#modal_import').modal('toggle');
   });
-    
+  
+  $("#btn_impshape").click(function(){
+    if ($('#txtTable').val() == '')
+      bootbox.alert("Must type Table Name")
+    else
+      WebOgr.importShape();
+  });
+
   $("#btn_export").click(function(){
-    bootbox.alert("Export");
+    $('#txtShape').val('');
+    $('#modal_export').modal('toggle');
+  });
+
+  $("#btn_expshape").click(function(){
+    if ($('#txtShape').val() == '')
+      bootbox.alert("Must type Shapefile Name")
+    else
+      WebOgr.exportShape();
   });
 
   $("#btn_credits").click(function() {
@@ -71,6 +95,7 @@ WebOgr.zipDirectory = function () {
 
   if (! fileZip.endsWith(".zip")){
     fileZip = fileZip + '.zip';
+    $('#txtZipFile').val(fileZip);
   }
 
   $.post('/zip', {dir: $('#txtPath').val(), zipname: fileZip},
@@ -96,7 +121,6 @@ WebOgr.zipDirectory = function () {
                   );
 }
 
-
 WebOgr.unzipFile = function () {
   $.post('/unzip', {dir: $('#txtDirectory').val(), zip: WebOgr.selFile},
           function(response, status) {
@@ -111,6 +135,69 @@ WebOgr.unzipFile = function () {
                           location.reload();
                         else
                           $('#modal_unzip').modal('hide');
+                      });
+              }  
+            }
+                  }).error(
+                      function(){
+                          console.log('Application not responding');
+                      }
+                  );
+}
+
+WebOgr.importShape = function () {
+  $('#modal_import').modal('hide');
+  $('#modal_process').modal('toggle');
+
+  $.post('/import', {file: WebOgr.selFile, 
+                    table: $('#txtTable').val(),
+                    proj : $('#cmbProj').val()},
+          function(response, status) {
+            $('#modal_process').modal('hide');
+
+            if (status == "success"){
+              if (response == "BAD"){
+                bootbox.alert("Error on import Shapefile");
+              }
+              else{
+                bootbox.alert("Import Shapefile successfully");
+              }  
+            }
+                  }).error(
+                      function(){
+                          console.log('Application not responding');
+                      }
+                  );
+}
+
+WebOgr.exportShape = function () {
+  var fileShp= $('#txtShape').val();
+
+  if (! fileShp.endsWith(".shp")){
+    fileShp = fileShp + '.shp';
+    $('#txtShape').val(fileShp);
+  }
+
+  $('#modal_export').modal('hide');
+  $('#modal_process').modal('toggle');
+
+  $.post('/export', {file: $('#txtShape').val(),
+                  table: $('#cmbTables').val(),
+                  proj : $('#cmbProjEx').val()},
+          function(response, status) {
+            $('#modal_process').modal('hide');
+
+            if (status == "success"){
+              if (response == "BAD"){
+                bootbox.alert("Error on Export Table to Shapefile");
+              }
+              else{
+                bootbox.confirm("Export Table to Shapefile successfully, do you want reload page?", 
+                      function(result){
+                        if (result)
+                          location.reload();
+                        else
+                          $('#modal_export').modal('hide');
                       });
               }  
             }

@@ -145,6 +145,26 @@ WebOgr.unzipFile = function () {
                   );
 }
 
+WebOgr.fillTables = function () {
+  $.get('/gettables', function(response, status){
+                  if (status == "success"){
+                    var jTables = JSON.parse(response);
+                    var selHtml = '';
+
+                    for(var i in jTables) {
+                      selHtml = selHtml + '<option value="' + jTables[i] + '">' + jTables[i] + '</option>';
+                    }
+
+                    $('#cmbTables').html(selHtml);
+                  }
+                  else
+                    console.log("Error in Status");
+                }).error(
+                        function(){
+                            console.log('Application not responding');
+                        });
+}
+
 WebOgr.importShape = function () {
   $('#modal_import').modal('hide');
   $('#modal_process').modal('toggle');
@@ -161,6 +181,8 @@ WebOgr.importShape = function () {
               }
               else{
                 bootbox.alert("Import Shapefile successfully");
+
+                WebOgr.fillTables();
               }  
             }
                   }).error(

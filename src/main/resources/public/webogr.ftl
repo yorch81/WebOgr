@@ -149,6 +149,9 @@
 
 			    // Listen Events
 			    WebOgr.listen();
+
+			    // Fill Combo
+			    WebOgr.fillTables();
 			});
 		</script>
 
@@ -277,9 +280,6 @@
 				    <div class="modal-body">
 				    	<label for="cmbTables">GeoReferential Tables:</label>
 						<select id="cmbTables" class="form-control">
-							<option value="predios" selected>predios</option>
-							<option value="predio2">predios2</option>
-							<option value="predios4326">predios4326</option>
 						</select>
 						<br>
 						<label for="txtShape">Shapefile Name:</label>

@@ -18,6 +18,7 @@ import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletException;
 import javax.servlet.http.Part;
 
+import org.json.JSONObject;
 import org.zeroturnaround.zip.ZipUtil;
 
 import spark.Request;
@@ -259,6 +260,19 @@ public class WebApp {
 	        	response.status(200);
 	        	
 	    		return retResponse;
+	        }
+	    });
+		
+		get("/gettables", new Route() {
+	        @Override
+	        public Object handle(Request request, Response response) {
+	        	OgrConnection conn = getDftDb();
+	        	
+	        	response.status(200);
+	        	
+	        	String jsonTab = conn.getOgrTables();
+	        	
+	        	return jsonTab;
 	        }
 	    });
 		

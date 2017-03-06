@@ -12,14 +12,31 @@ function WebOgr(){
 WebOgr.fileType = 0;
 
 /**
+ * Selected File
+ * 
+ * @type {String}
+ */
+WebOgr.selFile = '';
+
+/**
  * Listen Button Eventes
  */
 WebOgr.listen = function () {
   $("#btn_zip").click(function(){
-    if ($("#btn_zip").prop('btn-action') == '1')
-      bootbox.alert("Zip");
-    else
-      bootbox.alert("UnZip");
+    if ($("#btn_zip").prop('btn-action') == '1'){
+      $('#modal_zip').modal('toggle');
+    }
+    else{
+      $('#modal_unzip').modal('toggle');
+    }
+  });
+
+  $("#btn_zipfile").click(function(){
+    WebOgr.zipDirectory();
+  });
+
+  $("#btn_unzip").click(function(){
+    WebOgr.unzipFile();
   });
 
   $("#btn_import").click(function(){
@@ -42,6 +59,61 @@ WebOgr.setDirectory = function () {
   $.post('/setdir', {dir: $('#txtPath').val()},
           function(response,status) {
                     //console.log(response);
+                  }).error(
+                      function(){
+                          console.log('Application not responding');
+                      }
+                  );
+}
+
+WebOgr.zipDirectory = function () {
+  var fileZip = $('#txtZipFile').val();
+
+  if (! fileZip.endsWith(".zip")){
+    fileZip = fileZip + '.zip';
+  }
+
+  $.post('/zip', {dir: $('#txtPath').val(), zipname: fileZip},
+          function(response, status) {
+            if (status == "success"){
+              if (response == "BAD"){
+                bootbox.alert("File already exists");
+              }
+              else{
+                bootbox.confirm("Zip File successfully, do you want reload page?", 
+                      function(result){
+                        if (result)
+                          location.reload();
+                        else
+                          $('#modal_unzip').modal('hide');
+                      });
+              }  
+            }
+                  }).error(
+                      function(){
+                          console.log('Application not responding');
+                      }
+                  );
+}
+
+
+WebOgr.unzipFile = function () {
+  $.post('/unzip', {dir: $('#txtDirectory').val(), zip: WebOgr.selFile},
+          function(response, status) {
+            if (status == "success"){
+              if (response == "BAD"){
+                bootbox.alert("Directory already exists");
+              }
+              else{
+                bootbox.confirm("Unzip File successfully, do you want reload page?", 
+                      function(result){
+                        if (result)
+                          location.reload();
+                        else
+                          $('#modal_unzip').modal('hide');
+                      });
+              }  
+            }
                   }).error(
                       function(){
                           console.log('Application not responding');

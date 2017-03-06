@@ -91,7 +91,9 @@
 				$('#explorer').fileTree({ root: './', script: '/getfiles', folderEvent: 'click', expandSpeed: 750, collapseSpeed: 750, multiFolder: false }, function(file) { 
 
 					// Gets File Name
+					WebOgr.selFile = file;
 					file = file.substring(2);
+										
 					var files = file.split("/");
 					var arrLen = files.length - 1;
 					file = files[arrLen];
@@ -107,6 +109,7 @@
 							$('#txtFile').val("");
 
 							WebOgr.fileType = 0;
+							WebOgr.selFile = '';
 
 							WebOgr.setDirectory();
 
@@ -202,20 +205,39 @@
 			</span>    
 		</div>
 		
-		<!-- Static Modal Restore Data -->
-		<div class="modal fade" id="processing-restore" role="dialog" aria-hidden="true">
+		<!-- Static Modal Zip -->
+		<div class="modal fade" id="modal_zip" role="dialog" aria-hidden="true">
 		    <div class="modal-dialog">
 		        <div class="modal-content">
 		        	<div class="modal-header">
 				        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				        <h4 class="modal-title">Restore DataBase</h4>
+				        <h4 class="modal-title">Zip Directory</h4>
 				     </div>
 
 				    <div class="modal-body">
-				    	<label for="txtDbRestore">DataBase:</label>
-		        		<input id="txtDbRestore" type="text" class="form-control" placeholder="DataBase Restore" name="txtDbRestore" required>
+				    	<label for="txtZipFile">Zip File Name:</label>
+		        		<input id="txtZipFile" type="text" class="form-control" placeholder="Zip File Name" name="txtZipFile" required>
 						<br>
-						<button id="btn_restore" class="btn btn-lg btn-primary btn-block">Restore</button>
+						<button id="btn_zipfile" class="btn btn-lg btn-primary btn-block">Zip Directory</button>
+				    </div>
+		        </div>
+		    </div>
+		</div>
+
+		<!-- Static Modal Unzip -->
+		<div class="modal fade" id="modal_unzip" role="dialog" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		        	<div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				        <h4 class="modal-title">UnZip File</h4>
+				     </div>
+
+				    <div class="modal-body">
+				    	<label for="txtDirectory">Directory Name</label>
+		        		<input id="txtDirectory" type="text" class="form-control" placeholder="Directory Name" name="txtDirectory" required>
+						<br>
+						<button id="btn_unzip" class="btn btn-lg btn-primary btn-block">UnZip File</button>
 				    </div>
 		        </div>
 		    </div>
@@ -245,7 +267,7 @@
         </div>
 
 		<!-- Static Modal Processing -->
-		<div class="modal modal-static fade" id="processing-modal" role="dialog" aria-hidden="true">
+		<div class="modal modal-static fade" id="modal_process" role="dialog" aria-hidden="true">
 		    <div class="modal-dialog">
 		        <div class="modal-content">
 		           <div class="modal-body">

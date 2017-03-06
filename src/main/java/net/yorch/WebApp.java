@@ -18,6 +18,8 @@ import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletException;
 import javax.servlet.http.Part;
 
+import org.zeroturnaround.zip.ZipUtil;
+
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -206,20 +208,30 @@ public class WebApp {
 		// Unzip Zip File
 		post("/unzip", new Route() {
 	        @Override
-	        public Object handle(Request request, Response response) {	 
-	        	String dir = request.queryParams("dir");
+	        public Object handle(Request request, Response response) {	
+	        	String retResponse = "OK";
 	        	
-	        	request.session().attribute("appdir", dir);
+	        	String dir = request.queryParams("dir");
+	        	String zip = request.queryParams("zip");
+	        	
+	        	String curDir = request.session().attribute("appdir");
+	        	
+	        	dir = curDir + dir;
+	        	
+	        	if (WebApp.dirExists(dir)){
+	        		retResponse = "BAD";
+	        	}
+	        	else {
+	        		// create Dir
+	        		new File(dir).mkdir();
+	        		
+	        		// Unzip File
+	        		ZipUtil.unpack(new File(zip), new File(dir));
+	        	}
 	        	
 	        	response.status(200);
-	    		
-	        	// Unzip
-	    		//ZipUtil.unpack(new File("/home/yorch/tmp/zip/predios_.zip"), new File("/home/yorch/tmp/zip"));
-	    		
-	    		// Zip
-	    		//ZipUtil.pack(new File("/home/yorch/tmp/zip/predios/"), new File("/home/yorch/tmp/zip/predios.zip"));
 	        	
-	    		return dir;
+	    		return retResponse;
 	        }
 	    });
 		
@@ -227,13 +239,26 @@ public class WebApp {
 		post("/zip", new Route() {
 	        @Override
 	        public Object handle(Request request, Response response) {	 
-	        	String dir = request.queryParams("dir");
+	        	String retResponse = "OK";
 	        	
-	        	request.session().attribute("appdir", dir);
+	        	String dir = request.queryParams("dir");
+	        	String zip = request.queryParams("zipname");
+	        	
+	        	String curDir = request.session().attribute("appdir");
+	        	
+	        	zip = curDir + "../" + zip;
+	        	
+	        	if (WebApp.fileExists(zip)){
+	        		retResponse = "BAD";
+	        	}
+	        	else {
+	        		// Zip Directory
+	        		ZipUtil.pack(new File(dir), new File(zip));
+	        	}
 	        	
 	        	response.status(200);
-	    		
-	    		return dir;
+	        	
+	    		return retResponse;
 	        }
 	    });
 		

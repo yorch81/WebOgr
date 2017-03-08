@@ -149,6 +149,9 @@
 
 			    new Dropzone("#dropzonefile" , Dropzone.options.dropzonefile );
 
+			    // Base Directory
+			    WebOgr.baseDir = '${baseDir}';
+
 			    // Listen Events
 			    WebOgr.listen();
 
@@ -202,6 +205,8 @@
 				            <img src="./img/upload.png" class="img-responsive" alt="Dropzone">
 				          </div>
 				        </form>
+				        <br>
+				        <button id="btn_download" class="btn btn-lg btn-default">Download</button>
 					</center>
 				</div>
 			</span>    

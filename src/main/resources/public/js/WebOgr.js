@@ -12,6 +12,13 @@ function WebOgr(){
 WebOgr.fileType = 0;
 
 /**
+ * Base Directory
+ * 
+ * @type {String}
+ */
+WebOgr.baseDir = '';
+
+/**
  * Selected File
  * 
  * @type {String}
@@ -91,6 +98,21 @@ WebOgr.listen = function () {
           }
         }
       });
+  });
+
+  // Download File
+  $("#btn_download").click(function() {
+    if (WebOgr.fileType != 0){
+      var urlDownload = '/' + WebOgr.selFile.replace(WebOgr.baseDir,'');
+    
+      window.open(
+        urlDownload,
+        '_blank'
+      );
+    }
+    else{
+      bootbox.alert("Must select a File");
+    }
   });
 
   // Load Credits

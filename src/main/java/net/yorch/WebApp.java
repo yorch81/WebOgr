@@ -102,6 +102,9 @@ public class WebApp {
 		// Set Public Files
 		Spark.staticFileLocation("/public");
 		
+		// External Dir
+		Spark.externalStaticFileLocation(this.basedir);
+		
 		// Path /
 		get("/", new Route() {
 	        @Override

@@ -37,6 +37,9 @@ This application is a wrapper of ogr2ogr.
 ## References ##
 http://www.gdal.org/ogr2ogr.html
 
+## Donate ##
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GXT4C7UZ3HFA8)
+
 P.D. Let's go play !!!
 
 

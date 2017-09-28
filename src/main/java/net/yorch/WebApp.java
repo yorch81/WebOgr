@@ -183,6 +183,33 @@ public class WebApp {
 	        }
 	    });
 		
+		// Upload Android file
+		post("/upandroid", new Route() {
+	        @Override
+	        public Object handle(Request request, Response response) {
+	        	String selDir = "/home/yorch/temp/";
+	        	
+	        	MultipartConfigElement multipartConfigElement = new MultipartConfigElement(selDir);
+	        	
+	        	request.raw().setAttribute("org.eclipse.multipartConfig", multipartConfigElement);
+	        	String retResponse = "";
+	        	
+	        	try {
+					Part file = (Part) request.raw().getPart("cam");
+										
+					String fileName = UUID.randomUUID().toString().replace("-", "") + ".jpg";
+					
+					retResponse = fileName;
+					
+					file.write(fileName);
+				} catch (IOException | ServletException e) {
+					e.printStackTrace();
+				}
+	        	   
+	            return retResponse;
+	        }
+	    });
+
 		// Set Selected Directory
 		post("/setdir", new Route() {
 	        @Override
